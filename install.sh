@@ -1,5 +1,8 @@
 #/bin/bash
 
+#makes some of my settings work with HR settings
+ln -s ~/dotfiles ~/HRAddSettings
+
 cp ~/.gitconfig ~/.gitconfig.hrorig
 cat gitconfig >> ~/.gitconfig
 
