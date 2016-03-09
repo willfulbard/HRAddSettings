@@ -1,6 +1,0 @@
-#!/bin/bash
-
-scriptname=${PWD##*/}
-
-~/dotfiles/fswatch/$scriptname.sh
-
