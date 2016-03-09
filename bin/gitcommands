@@ -1,0 +1,12 @@
+#!/bin/bash
+
+
+echo " gits='git status ' "
+echo " gita='git add '    "
+echo " gitb='git branch ' "
+echo " gitc='git commit'  "
+echo " gitd='git diff'    "
+echo " gith='git hist'    "
+echo " gitco='git checkout'"
+echo " gitk='gitk --all&' "
+echo " gitx='gitx --all'  "

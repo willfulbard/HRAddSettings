@@ -1,0 +1,52 @@
+#!/bin/bash
+
+array_contains () { 
+  local array=$1
+  local seeking=$2
+  local in=""
+  for element in "${!array}"; do
+    if [[ $element == $seeking ]]; then
+      in="found"
+      break
+    fi
+  done
+  return $in
+}
+scriptname=$1
+
+echo "" > ~/Public/jstest/include1.js
+echo "" > ~/Public/jstest/include2.js
+echo "" > ~/Public/jstest/include3.js
+echo "" > ~/Public/jstest/include4.js
+echo "" > ~/Public/jstest/include5.js
+echo "" > ~/Public/jstest/include6.js
+echo "" > ~/Public/jstest/include_underscore.js
+echo "" > ~/Public/jstest/include_jquery.js
+
+scriptnumber=""
+
+while test $# -gt 0
+do
+  case "$1" in
+    jquery)
+      cp ~/Public/jstest/jquery.js ~/Public/jstest/include_jquery.js
+      ;;
+    underscore)
+      cp ~/Public/jstest/underscore.js ~/Public/jstest/include_underscore.js
+      ;;
+    *)
+      if [[ $1 =~ ^[0-6]$ ]]; then
+        cat $scriptname > ~/Public/jstest/include$1.js
+        scriptnumber=$1
+      fi
+      ;;
+  esac
+  shift
+done
+
+if [[ -z "$scriptnumber" ]]; then
+  cat $scriptname > ~/Public/jstest/include1.js
+fi
+
+open ~/Public/jstest/index.html
+

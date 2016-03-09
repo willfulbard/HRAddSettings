@@ -1,0 +1,161 @@
+""""""""""""""""""""""""""""""""""
+"""""""""vim-plug Settings""""""""""
+""""""""""""""""""""""""""""""""""
+set nocompatible              " be iMproved, required
+filetype plugin on
+
+call plug#begin('~/.vim/plugged')
+Plug 'vim-scripts/nextval'
+Plug 'airblade/vim-gitgutter'
+Plug 'rking/ag.vim', { 'on':  'Ag' }
+Plug 'altercation/vim-colors-solarized'
+Plug 'kien/ctrlp.vim'
+Plug 'Raimondi/delimitMate'
+function! BuildYCM(info)
+  if a:info.status == 'installed' || a:info.force
+    !./install.py --clang-completer --tern-completer 
+  endif
+endfunction
+Plug 'Valloric/YouCompleteMe', { 'do': function('BuildYCM') }
+function! BuildTern(info)
+  if a:info.status == 'installed' || a:info.force
+    !npm install
+  endif
+endfunction
+Plug 'ternjs/tern_for_vim', { 'do': function('BuildTern') }
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-repeat'
+Plug 'tpope/vim-commentary'
+Plug 'tpope/vim-fugitive'
+Plug 'scrooloose/nerdtree', { 'on':  'NERDTreeToggle' }
+Plug 'easymotion/vim-easymotion'
+Plug 'SirVer/ultisnips'
+"Plug 'pangloss/vim-javascript', { 'for': 'javascript' }
+Plug 'jelera/vim-javascript-syntax', { 'for': 'javascript' }
+"Plug 'othree/javascript-libraries-syntax.vim', { 'for': 'javascript' }
+call plug#end()
+
+
+""""""""""""""""""""""""""""""""""
+"""""""""STATUS LINE EDITS""""""""
+""""""""""""""""""""""""""""""""""
+set laststatus=2
+set statusline=%{FileName()}       "tail of the filename
+set statusline+=%h      "help file flag
+set statusline+=%m      "modified flag
+set statusline+=%r      "read only flag
+set statusline+=%y      "filetype
+set statusline+=%=      "left/right separator
+set statusline+=%3.3l/%-4.4L   "cursor line/total lines
+set statusline+=c%-3.3c     "cursor column
+set statusline+=b#%-2.2n\                       "buffer number
+
+function! FileName() 
+	let mypath = substitute(expand('%:p'), "/var/www/", "web~", "")
+	let mypath = substitute(expand('%:p'), "/Users/will/Documents/HackReactor/", "HR~", "")
+	return substitute(mypath, "/htdocs/", "/", "")
+endfunction
+
+""""""""""""""""""""""""""""""""""
+"""""""""Solarize settings""""""""
+""""""""""""""""""""""""""""""""""
+syntax on
+set t_Co=256
+set background=dark
+let g:solarized_bold=1
+let g:solarized_contrast='normal'
+let g:solarized_termtrans=1
+let g:solarized_termcolors=256
+colorscheme solarized
+highlight LineNr ctermbg=NONE guibg=NONE
+highlight CursorLineNr term=bold ctermfg=Yellow gui=bold guifg=Yellow
+highlight SignColumn ctermbg=NONE guibg=NONE
+highlight GitGutterAdd guibg=NONE ctermbg=NONE
+highlight GitGutterChange guibg=NONE ctermbg=NONE
+highlight GitGutterDelete guibg=NONE ctermbg=NONE
+highlight GitGutterChangeDelete guibg=NONE ctermbg=NONE
+highlight GitGutterDelete ctermfg=red guifg=red
+" now set it up to change the status line based on mode
+au InsertEnter * hi StatusLine ctermfg=DarkMagenta
+hi StatusLine ctermfg=DarkCyan
+au InsertLeave * hi StatusLine ctermfg=DarkCyan
+
+
+""""""""""""""""""""""""""""""""""
+"""""""""AUTO INDENT SETTINGS"""""
+""""""""""""""""""""""""""""""""""
+set expandtab
+set softtabstop=2 
+set shiftwidth=2 
+set smartindent
+
+
+""""""""""""""""""""""""""""""""""
+"""""""""AUTO CLOSURES""""""""""""
+""""""""""""""""""""""""""""""""""
+"Now just using the AutoClose plugin https://github.com/Townk/vim-autoclose
+":inoremap ' ''<Esc>i
+"This one stays, so that if you pres {<CR>, it does the full { matching thing.
+:inoremap {<CR> {<CR>}<C-o>O
+
+""""""""""""""""""""""""""""""""""
+"""""""""UltiSnips Enter""""""""""
+""""""""""""""""""""""""""""""""""
+let g:UltiSnipsExpandTrigger = "<nop>"
+let g:ulti_expand_or_jump_res = 0
+function ExpandSnippetOrCarriageReturn()
+    let snippet = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+        return snippet
+    else
+        return "\<CR>"
+    endif
+endfunction
+inoremap <expr> <CR> pumvisible() ? "<C-R>=ExpandSnippetOrCarriageReturn()<CR>" : "\<CR>"
+let g:UltiSnipsJumpForwardTrigger="<tab>"                                       
+let g:UltiSnipsJumpBackwardTrigger="<s-tab>"  
+
+let mapleader=","
+"Store swp files in a different directory
+set backupdir=~/.vim-swp,~/.tmp,~/tmp,/var/tmp,/tmp
+set directory=~/.vim-swp,~/.tmp,~/tmp,/var/tmp,/tmp
+"Use system clipboard as clipboard
+set clipboard=unnamed
+"set relativenumber " This is too taxing on the system, use ,,j or ,,k
+set number
+set nowrap
+autocmd InsertLeave * if expand('%') != '' | update | endif "Save on insert leave if something has changed
+
+noremap <Up> <NOP>
+noremap <Down> <NOP>
+noremap <Left> <NOP>
+noremap <Right> <NOP>
+inoremap <Up> <nop>
+inoremap <Down> <nop>
+inoremap <Left> <nop>
+inoremap <Right> <nop>
+""""""""""""""""""""""""""""""""""
+"""""""""Custom Commands""""""""""
+""""""""""""""""""""""""""""""""""
+command W w
+command GW Gwrite
+command GC Gcommit
+inoremap <C-e> <Esc>A
+inoremap <C-b> <Esc>A<Space>{<CR>}<Esc>ko
+inoremap <C-t> <Esc>A;<Esc>
+inoremap ,, <Esc>
+
+""""""""""""""""""""""""""""""""""
+""""""""""Random Plugin Settings""""""""""""""
+""""""""""""""""""""""""""""""""""
+let g:gitgutter_sign_column_always = 1
+let g:ag_working_path_mode="r"
+let g:ctrlp_working_path_mode = 'ra'
+let g:ycm_autoclose_preview_window_after_completion = 1
+nmap <silent> <unique> + <Plug>nextvalInc 
+nmap <silent> <unique> - <Plug>nextvalDec
+syntax sync minlines=100
+syntax sync maxlines=240
+set synmaxcol=800
+set guifont=Menlo:h18
+

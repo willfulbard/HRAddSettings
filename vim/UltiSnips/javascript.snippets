@@ -1,0 +1,27 @@
+snippet func "function" i
+var $1 = function ($2) {
+  $0
+};
+endsnippet
+
+snippet funccb "callback based API"
+$1($2function ($3) {
+  $0
+});
+endsnippet
+
+snippet jqe "JQuery Element"
+$('$1').$0
+endsnippet
+
+snippet jqcb "JQuery callback function"
+$('$1').$2($3, function($4) {
+  $0
+});
+endsnippet
+
+snippet ubcb "Underbar callback function"
+_$1($2, function($3) {
+  $0
+});
+endsnippet

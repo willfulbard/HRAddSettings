@@ -1,0 +1,13 @@
+#!/bin/bash
+
+case "$1" in
+
+ebnweb) ssh -leastbaynursery eastbaynursery.com
+;;
+ebn) ssh -lpi -p3456 eastbaynursery.officecentral.biz
+;;
+help) echo "myssh [ebnweb|ebn|[default]]" 
+;;
+*) ssh -lwill www.willfulbard.com
+;;
+esac
